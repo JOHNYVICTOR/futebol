@@ -1,0 +1,1517 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BOLEIROS (controle de times)</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* New Vibrant and Modern Color Palette */
+            --primary-color: #007bff; /* A lively blue for main actions */
+            --secondary-color: #6c757d; /* Muted gray for secondary elements */
+            --accent-color: #28a745; /* A fresh green for success/highlights */
+            --text-color: #e0e0e0; /* Light gray for general text on dark backgrounds */
+            --heading-color: #ffffff; /* Pure white for headings */
+            --dark-bg: #212529; /* Dark charcoal for main background */
+            --card-bg: rgba(33, 37, 41, 0.9); /* Slightly transparent dark card background */
+            --input-bg: rgba(255, 255, 255, 0.1); /* Lightly transparent input background */
+            --border-color: rgba(255, 255, 255, 0.2); /* Subtle borders */
+            --success-btn: #28a745; /* Consistent success green */
+            --danger-btn: #dc3545; /* Standard danger red */
+            --warning-btn: #ffc107; /* Standard warning yellow */
+            --info-btn: #17a2b8; /* Standard info cyan */
+            --shadow-light: rgba(0, 0, 0, 0.4); /* Lighter shadow for depth */
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--dark-bg), #343a40); /* Gradient for depth */
+            color: var(--text-color);
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+
+        /* Headings */
+        h1, h2, h3 { /* Modified: Added h3 here to apply common styles */
+            text-align: center;
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 5px var(--shadow-light); /* More pronounced shadow */
+            color: var(--heading-color); /* Applied white color */
+            font-weight: 700; /* Applied bold font */
+        }
+
+        h1 { font-size: 3.2rem; }
+        h2 { font-size: 2.5rem; }
+        /* Kept h3 specific font size but inherited other styles from the combined selector */
+        h3 {
+            font-size: 2rem;
+            /* color: var(--accent-color); -- Removed as it's now set in the combined h1, h2, h3 rule */
+            /* font-weight: 600; -- Removed as it's now set in the combined h1, h2, h3 rule */
+        }
+
+        /* Navbar */
+        .navbar {
+            background: rgba(33, 37, 41, 0.95); /* Darker, less transparent navbar */
+            backdrop-filter: blur(8px); /* Subtle blur */
+            box-shadow: 0 4px 15px var(--shadow-light); /* Stronger shadow */
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            color: var(--heading-color) !important;
+            font-weight: 800; /* Extra bold */
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .navbar-brand:hover {
+            color: var(--accent-color) !important;
+        }
+
+        .navbar-brand img {
+            height: 45px; /* Slightly larger logo */
+            margin-right: 12px;
+            border-radius: 50%; /* Make logo round */
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.5); /* Blue glow */
+        }
+
+        .nav-link {
+            color: var(--text-color) !important;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+        }
+
+        .nav-link:hover {
+            color: var(--accent-color) !important;
+            background-color: rgba(0, 123, 255, 0.1);
+            transform: translateY(-2px); /* Slight lift on hover */
+        }
+
+        /* Custom Card Style */
+        .card-custom {
+            background: var(--card-bg);
+            border-radius: 16px; /* More rounded corners */
+            padding: 2rem; /* More padding */
+            margin: 1.5rem 0; /* More margin */
+            backdrop-filter: blur(12px); /* Stronger blur */
+            box-shadow: 0 8px 25px var(--shadow-light); /* Deeper shadow */
+            border: 1px solid var(--border-color); /* Subtle border */
+            position: relative; /* For animations or overlays */
+            overflow: hidden;
+        }
+
+        .card-custom::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
+        }
+
+        /* Form Elements */
+        label {
+            margin-bottom: 0.6rem;
+            display: block;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        input, select {
+            padding: 0.9rem; /* More padding for inputs */
+            border-radius: 10px; /* More rounded inputs */
+            border: 1px solid var(--border-color);
+            background: var(--input-bg);
+            color: var(--heading-color); /* White text in inputs */
+            width: 100%;
+            margin-bottom: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25); /* Bootstrap-like focus glow */
+            background-color: rgba(255, 255, 255, 0.15); /* Slightly lighter on focus */
+            outline: none;
+        }
+
+        input::placeholder { color: #aaa; opacity: 0.8; } /* Lighter placeholder */
+
+        select option {
+            background: var(--dark-bg); /* Darker background for options */
+            color: var(--text-color);
+        }
+
+        /* Custom Buttons */
+        .btn-primary-custom, .btn-danger-custom, .btn-warning-custom, .btn-info-custom {
+            padding: 0.85rem 1.5rem; /* Larger buttons */
+            font-weight: bold;
+            border: none;
+            border-radius: 10px; /* More rounded buttons */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            display: block;
+            margin-top: 1rem;
+            text-transform: uppercase; /* Uppercase text for buttons */
+            letter-spacing: 0.05em;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-primary-custom { background: var(--primary-color); color: var(--heading-color); }
+        .btn-primary-custom:hover { background: #0056b3; transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0, 123, 255, 0.4); }
+
+        .btn-danger-custom { background: var(--danger-btn); color: var(--heading-color); }
+        .btn-danger-custom:hover { background: #bd2130; transform: translateY(-3px); box-shadow: 0 6px 15px rgba(220, 53, 69, 0.4); }
+
+        .btn-warning-custom { background: var(--warning-btn); color: var(--dark-bg); } /* Dark text for warning */
+        .btn-warning-custom:hover { background: #e0a800; transform: translateY(-3px); box-shadow: 0 6px 15px rgba(255, 193, 7, 0.4); }
+
+        .btn-info-custom { background: var(--info-btn); color: var(--heading-color); }
+        .btn-info-custom:hover { background: #117a8b; transform: translateY(-3px); box-shadow: 0 6px 15px rgba(23, 162, 184, 0.4); }
+
+        /* New button style for "Encerrar Dia de Jogo" */
+        .btn-end-day {
+            background: var(--secondary-color);
+            color: var(--heading-color);
+        }
+        .btn-end-day:hover {
+            background: #5a6268;
+        }
+
+        .btn-sm-custom {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.9rem;
+            margin-left: 0.8rem;
+            width: auto;
+            display: inline-block;
+            border-radius: 8px;
+            box-shadow: none; /* No extra shadow for small buttons */
+            letter-spacing: normal;
+            text-transform: none;
+        }
+
+        /* Team Display */
+        .equipes-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem; /* Increased gap */
+            justify-content: center;
+        }
+
+        .caixa-de-equipe {
+            background: rgba(0, 123, 255, 0.15); /* Light blue tint for teams */
+            border-radius: 12px;
+            padding: 1.2rem;
+            min-width: 220px; /* Slightly wider */
+            flex: 1;
+            min-height: 180px; /* Taller for better spacing */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border: 1px solid rgba(0, 123, 255, 0.3);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .caixa-de-equipe:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.4);
+        }
+
+        .caixa-de-equipe h3 {
+            color: var(--heading-color); /* White team titles */
+            margin-bottom: 1rem;
+            font-size: 1.6rem;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        }
+
+        .caixa-de-equipe ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .caixa-de-equipe li {
+            padding: 0.4rem 0;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+            color: var(--text-color);
+            font-size: 1.1rem;
+            font-weight: 400;
+        }
+        .caixa-de-equipe li:last-child {
+            border-bottom: none;
+        }
+
+        /* Chronometer */
+        #cronometroDisplay {
+            font-size: 4rem; /* Larger font */
+            text-align: center;
+            margin: 1.5rem 0;
+            font-weight: 800; /* Extra bold */
+            color: var(--accent-color); /* Bright green */
+            text-shadow: 0 0 15px rgba(40, 167, 69, 0.6); /* Green glow */
+            background: rgba(0,0,0,0.1);
+            border-radius: 15px;
+            padding: 0.5rem;
+        }
+
+        /* Table styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+            background: rgba(0,0,0,0.1);
+            border-radius: 12px;
+            overflow: hidden; /* Ensures border-radius applies */
+        }
+
+        th, td {
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0.8rem; /* More padding */
+            text-align: left;
+            color: var(--text-color);
+        }
+
+        th {
+            background: rgba(0, 123, 255, 0.2); /* Light blue header */
+            color: var(--heading-color);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        tbody tr:nth-child(even) {
+            background: rgba(0,0,0,0.05); /* Subtle zebra striping */
+        }
+
+        /* Upcoming Games Block */
+        #proximosJogos .times-proximos {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); /* Adjusted min-width */
+            gap: 1.2rem; /* Slightly smaller gap */
+            margin-top: 1.5rem;
+        }
+        #proximosJogos .time-proximo {
+            background: rgba(255,255,255,0.08); /* Lighter background */
+            border-radius: 10px;
+            padding: 1rem;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+        #proximosJogos .time-proximo h4 {
+            color: var(--primary-color); /* Blue for next game titles */
+            margin-bottom: 0.8rem;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+        #proximosJogos .time-proximo div {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.3rem 0;
+            border-bottom: 1px dashed rgba(255,255,255,0.08);
+            font-size: 0.95rem;
+        }
+        #proximosJogos .time-proximo div:last-child {
+            border-bottom: none;
+        }
+        #proximosJogos .time-proximo div button.btn-sm-custom {
+            margin-left: 0.6rem;
+            flex-shrink: 0;
+        }
+
+        /* Player Selection List (checkboxes) */
+        #listaSelecaoJogadores {
+            max-height: 350px; /* Taller list */
+            overflow-y: auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Adjusted min-width */
+            gap: 1rem;
+            padding: 1.5rem;
+            background: rgba(0,0,0,0.35); /* Darker background */
+            border-radius: 15px; /* More rounded */
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.6); /* Inner shadow */
+            user-select: none;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+        #listaSelecaoJogadores label {
+            background: rgba(0, 123, 255, 0.1); /* Light blue tint */
+            border-radius: 20px; /* Pill-shaped checkboxes */
+            padding: 0.7rem 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--text-color);
+            margin-bottom: 0;
+            border: 1px solid rgba(0, 123, 255, 0.2);
+        }
+        #listaSelecaoJogadores label:hover {
+            background: rgba(0, 123, 255, 0.25);
+            box-shadow: 0 6px 15px rgba(0, 123, 255, 0.4);
+            transform: translateY(-4px) scale(1.02); /* More pronounced hover effect */
+            color: var(--heading-color);
+        }
+        #listaSelecaoJogadores input[type="checkbox"] {
+            width: 24px; /* Larger checkbox */
+            height: 24px;
+            cursor: pointer;
+            accent-color: var(--accent-color); /* Green accent */
+            flex-shrink: 0;
+            border-radius: 6px; /* Slightly rounded checkbox */
+            box-shadow: 0 0 5px rgba(0,0,0,0.4);
+            transition: box-shadow 0.3s ease, transform 0.2s ease;
+            margin-bottom: 0;
+        }
+        #listaSelecaoJogadores input[type="checkbox"]:checked {
+            transform: scale(1.1);
+        }
+        #listaSelecaoJogadores input[type="checkbox"]:focus-visible {
+            outline-offset: 3px;
+            outline: 3px solid var(--primary-color);
+            box-shadow: 0 0 8px var(--primary-color);
+        }
+        /* Scrollbar estilizada para WebKit */
+        #listaSelecaoJogadores::-webkit-scrollbar {
+            width: 10px; /* Wider scrollbar */
+        }
+        #listaSelecaoJogadores::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.05); /* Lighter track */
+            border-radius: 10px;
+        }
+        #listaSelecaoJogadores::-webkit-scrollbar-thumb {
+            background: var(--primary-color); /* Blue thumb */
+            border-radius: 10px;
+            transition: background-color 0.3s ease;
+        }
+        #listaSelecaoJogadores::-webkit-scrollbar-thumb:hover {
+            background: #0056b3; /* Darker blue on hover */
+        }
+
+        /* Player list with "Foi Embora" button */
+        #listaDeJogadores li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0; /* More padding */
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-color);
+            font-size: 1.1rem;
+        }
+        #listaDeJogadores li:last-child {
+            border-bottom: none;
+        }
+        #listaDeJogadores button {
+            margin-bottom: 0;
+        }
+        #listaDeJogadores ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        /* Modal de adicionar jogador */
+        #adicionarJogadorModal {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1050;
+            padding: 2.5rem; /* More padding */
+            border-radius: 20px; /* More rounded */
+            max-width: 550px; /* Slightly wider */
+            width: 90%;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.7); /* Deeper shadow */
+            animation: fadeIn 0.4s ease-out; /* Slower animation */
+            background: var(--card-bg);
+            border: 1px solid var(--primary-color); /* Primary color border */
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translate(-50%, -70%) scale(0.9); } /* From slightly smaller and higher */
+            to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+        #adicionarJogadorModal h2 {
+            margin-bottom: 2rem;
+            color: var(--primary-color); /* Blue heading */
+            font-size: 2.2rem;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        }
+
+        #cadastroNovosCampos {
+            border-top: 1px solid rgba(255,255,255,0.25);
+            margin-top: 2rem;
+            padding-top: 2rem;
+        }
+        #adicionarJogadorModal .modal-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2.5rem;
+            gap: 1.5rem; /* Larger gap between buttons */
+        }
+        #adicionarJogadorModal .modal-actions button {
+            width: auto;
+            flex-grow: 1;
+        }
+
+        /* Backdrop para o modal */
+        .modal-backdrop-custom {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.75); /* Darker, more opaque backdrop */
+            z-index: 1040;
+            display: none;
+            animation: fadeOverlayIn 0.3s forwards;
+        }
+        @keyframes fadeOverlayIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 2rem; }
+            h3 { font-size: 1.6rem; } /* Adjusted font size for smaller screens */
+
+            .navbar-brand { font-size: 1.3rem; }
+            .navbar-brand img { height: 35px; }
+
+            .card-custom { padding: 1.5rem; }
+
+            .btn-primary-custom, .btn-danger-custom, .btn-warning-custom, .btn-info-custom {
+                padding: 0.75rem 1rem;
+                font-size: 0.95rem;
+            }
+
+            #cronometroDisplay { font-size: 3rem; }
+
+            #adicionarJogadorModal { padding: 1.5rem; }
+        }
+
+        @media (max-width: 576px) {
+            .navbar-toggler { margin-left: auto; } /* Push toggler to the right */
+            .navbar-collapse { text-align: center; } /* Center nav items on collapse */
+            .nav-link { margin-bottom: 0.5rem; }
+
+            .container { padding: 0 1rem; } /* More padding on small screens */
+
+            .card-custom { padding: 1rem; margin: 1rem 0; }
+            
+            #listaSelecaoJogadores {
+                grid-template-columns: 1fr; /* Single column on very small screens */
+                padding: 1rem;
+            }
+
+            #adicionarJogadorModal .modal-actions {
+                flex-direction: column; /* Stack buttons vertically */
+                gap: 0.8rem;
+            }
+        }
+        /* Style for Time Destaque block */
+        #timeDestaque {
+            text-align: center;
+        }
+        #timeDestaque h3 {
+            /* These styles are now controlled by the general h1, h2, h3 rule. */
+            margin-bottom: 1.5rem;
+            /* color: var(--accent-color); -- No longer needed here */
+        }
+        #timeDestaque .highlight-team-info {
+            background: rgba(40, 167, 69, 0.15); /* Green tint for highlight team */
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(40, 167, 69, 0.3);
+            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.2);
+            margin-top: 1rem;
+            display: inline-block; /* To center the block */
+            min-width: 300px;
+        }
+        #timeDestaque .highlight-team-info h4 {
+            color: var(--heading-color);
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        }
+        #timeDestaque .highlight-team-info p {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+        #timeDestaque .highlight-team-info ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 1rem;
+            border-top: 1px dashed rgba(255,255,255,0.1);
+            padding-top: 1rem;
+        }
+        #timeDestaque .highlight-team-info li {
+            padding: 0.3rem 0;
+            color: var(--text-color);
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="assets/panela_de_futebol_img.jpg" alt="Logo Panela de Futebol">
+                Bem-vindo ao Panelinha de Futebol (Boleiros)
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#cadastro-jogadores-section">Cadastro</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#formacao-times-section">Times</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#controle-partidas-section">Partidas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#historico-partidas-section">Histórico</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5 flex-grow-1">
+        <h1 class="mb-4">BOLEIROS (controle de times)</h1>
+
+        <section id="cadastro-jogadores-section" class="row justify-content-center mb-5">
+            <div class="col-md-8 col-lg-6">
+                <div class="card-custom">
+                    <h2>Cadastro de Jogadores</h2>
+                    <form id="cadastroForm">
+                        <div class="mb-3">
+                            <label for="nome" class="form-label">Nome:</label>
+                            <input type="text" class="form-control" id="nome" required placeholder="Nome completo" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="apelido" class="form-label">Apelido:</label>
+                            <input type="text" class="form-control" id="apelido" required placeholder="Apelido do jogador" />
+                        </div>
+                        <button type="submit" class="btn-primary-custom">Incluir Jogador</button>
+                    </form>
+                </div>
+                <div class="card-custom mt-4">
+                    <h2>Jogadores Cadastrados</h2>
+                    <ul id="listaDeJogadores"></ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="formacao-times-section" class="row justify-content-center mb-5">
+            <div class="col-md-10 col-lg-8">
+                <div class="card-custom">
+                    <h2>Formação Aleatória de Times</h2>
+                    <div class="mb-3">
+                        <label class="form-label">Selecione os jogadores para o sorteio:</label>
+                        <div id="listaSelecaoJogadores">
+                            </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="qtdPorTime" class="form-label">Jogadores por time:</label>
+                        <input type="number" class="form-control" id="qtdPorTime" min="1" value="5" />
+                    </div>
+                    <button type="submit" class="btn-primary-custom" id="formTimesButton">Criar Times Aleatórios</button>
+                </div>
+                <div class="card-custom mt-4">
+                    <h2>Times na Fila</h2>
+                    <div class="equipes-container" id="timesContainer"></div>
+                    <button id="btnVamosJogar" class="btn-primary-custom mt-3" style="display:none">Vamos Jogar!</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="controle-partidas-section" class="row justify-content-center mb-5">
+            <div class="col-md-10 col-lg-8">
+                <div class="card-custom" id="controlePartida" style="display:none">
+                    <h2>Início e Controle de Partidas</h2>
+                    <div id="numeroJogo" class="text-center mb-3 fs-4 fw-bold">Jogo 1</div>
+                    <div id="partidaInfo" class="mb-4"></div>
+                    <div class="mb-3">
+                        <label for="duracaoJogo" class="form-label">Duração do jogo (minutos):</label>
+                        <input type="number" class="form-control" id="duracaoJogo" min="1" value="10" />
+                    </div>
+                    <div id="cronometroDisplay" class="mb-4">00:00</div>
+                    <div class="d-grid gap-2 mb-3">
+                        <button id="btnIniciar" class="btn-primary-custom">Iniciar</button>
+                        <button id="btnPausar" class="btn-warning-custom">Pausar</button>
+                        <button class="btn-danger-custom" id="btnEncerrar">Encerrar</button>
+                    </div>
+                    <button id="btnAdicionarJogador" class="btn-info-custom mt-3">Adicionar Jogador à Partida</button>
+                    <button id="btnEncerrarDiaDeJogo" class="btn-primary-custom btn-end-day mt-3">Encerrar Dia de Jogo</button>
+                    
+
+                    <div id="proximosJogos" class="mt-4">
+                        <h3>Próximos Jogos</h3>
+                        <div class="times-proximos" id="timesProximosContainer">
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="historico-partidas-section" class="row justify-content-center mb-5">
+            <div class="col-md-10 col-lg-8">
+                <div class="card-custom" id="historicoPartidas">
+                    <h3>Histórico do Jogo</h3>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr><th>Jogo</th><th>Partida</th><th>Vencedor</th><th>Duração</th></tr>
+                            </thead>
+                            <tbody id="tabelaHistorico"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="timeDestaque-section" class="row justify-content-center mb-5">
+            <div class="col-md-10 col-lg-8">
+                <div class="card-custom" id="timeDestaque">
+                    <h3>Time Destaque do Dia</h3>
+                    <div class="highlight-team-info" id="timeDestaqueInfo">
+                        <p class="text-muted">Nenhum time em destaque ainda. Jogue algumas partidas!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <div id="adicionarJogadorModal" class="card-custom">
+        <h2>Adicionar Jogador à Partida</h2>
+        <div class="mb-3">
+            <label for="selectJogadorExistente" class="form-label">Selecionar Jogador Existente:</label>
+            <select id="selectJogadorExistente" class="form-select">
+                <option value="">-- Selecione ou Cadastre um Novo --</option>
+            </select>
+        </div>
+        
+        <p class="text-center my-4 text-white-50">OU</p>
+
+        <div id="cadastroNovosCampos">
+            <h3>Cadastrar Novo Jogador</h3>
+            <div class="mb-3">
+                <label for="novoNome" class="form-label">Nome:</label>
+                <input type="text" class="form-control" id="novoNome" placeholder="Nome completo" />
+            </div>
+            <div class="mb-3">
+                <label for="novoApelido" class="form-label">Apelido:</label>
+                <input type="text" class="form-control" id="novoApelido" placeholder="Apelido do jogador" />
+            </div>
+        </div>
+        
+        <div class="modal-actions d-flex justify-content-between mt-4">
+            <button id="btnConfirmarAdicao" class="btn-primary-custom flex-fill me-2">Adicionar</button>
+            <button class="btn-danger-custom flex-fill ms-2" id="btnVoltarModal">Voltar</button>
+        </div>
+    </div>
+    <div class="modal-backdrop-custom" id="modalBackdrop"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdseSNz1bM3NfK6V0L" crossorigin="anonymous"></script>
+    <script>
+        let jogadores = JSON.parse(localStorage.getItem('jogadores')) || [];
+        let times = []; // Lista mestre de todos os times formados para AQUELE DIA/SESSÃO
+        let filaTimes = []; // Times que estão na fila para jogar
+        let timeAtual = []; // Os 2 times que estão jogando atualmente
+        let previousWinner = null; // Armazena o time que venceu a partida anterior
+        let cronometro = null;
+        let timeRemaining = 0;
+        let emJogo = false;
+        let numeroPartida = 1;
+
+        // NOVO: Objeto para armazenar estatísticas de cada time (vitórias e empates)
+        // A chave será o índice do time na array 'times' ou um identificador único se 'times' for reorganizado
+        let timeStats = {}; 
+
+        // References to buttons that need to be enabled/disabled
+        const formTimesButton = document.getElementById('formTimesButton');
+        const btnVamosJogar = document.getElementById('btnVamosJogar');
+
+        function salvarJogadores() {
+            localStorage.setItem('jogadores', JSON.stringify(jogadores));
+        }
+
+        function atualizarLista() {
+            const ul = document.getElementById('listaDeJogadores');
+            ul.innerHTML = '';
+            if (jogadores.length === 0) {
+                ul.innerHTML = '<li class="text-center text-muted">Nenhum jogador cadastrado.</li>';
+            } else {
+                ul.innerHTML = jogadores.map((j) => `
+                    <li>
+                        ${j.apelido} (${j.nome})
+                    </li>
+                `).join('');
+            }
+            atualizarListaSelecao();
+            popularSelectJogadores(); // Adicionado para atualizar o select do modal
+        }
+
+        function atualizarListaSelecao() {
+            const container = document.getElementById('listaSelecaoJogadores');
+            container.innerHTML = '';
+            if (jogadores.length === 0) {
+                container.innerHTML = '<div class="text-center text-muted w-100">Nenhum jogador cadastrado.</div>';
+                return;
+            }
+            jogadores.forEach((j, idx) => {
+                const label = document.createElement('label');
+                label.htmlFor = 'checkJogador' + idx;
+                label.innerHTML = `
+                    <input type="checkbox" id="checkJogador${idx}" value="${idx}" checked />
+                    <span>${j.apelido}</span>
+                `;
+                container.appendChild(label);
+            });
+        }
+
+        // Função para remover jogador apenas do contexto do jogo (times e fila)
+        function removerJogadorDoJogo(jogadorRemovidoApelido, timeIndexEmCampo = -1, playerIndexInTeam = -1) {
+            const jogadorRemovido = jogadores.find(j => j.apelido === jogadorRemovidoApelido);
+            if (!jogadorRemovido) return;
+
+            if (confirm(`Tem certeza que deseja remover ${jogadorRemovido.apelido} dos times e da fila para o jogo de hoje?`)) {
+                let jogadorEstavaEmCampo = false;
+                const qtdPorTime = parseInt(document.getElementById('qtdPorTime').value);
+
+                // 1. Tentar remover do time atual (se estiver jogando e os índices foram passados)
+                if (timeIndexEmCampo !== -1 && playerIndexInTeam !== -1 && timeAtual[timeIndexEmCampo]) {
+                    const timeEmCampo = timeAtual[timeIndexEmCampo];
+                    if (timeEmCampo[playerIndexInTeam] && timeEmCampo[playerIndexInTeam].apelido === jogadorRemovidoApelido) {
+                        timeEmCampo.splice(playerIndexInTeam, 1); // Remove do time em campo
+                        jogadorEstavaEmCampo = true;
+
+                        // Tenta adicionar um substituto do primeiro time da fila
+                        if (filaTimes.length > 0 && filaTimes[0].length > 0) {
+                            const substituto = filaTimes[0].shift();
+                            timeEmCampo.push(substituto);
+                            organizarFilaAposRemocao(qtdPorTime); // Reorganiza a fila em cascata
+                            alert(`${substituto.apelido} entrou no lugar de ${jogadorRemovido.apelido}.`);
+                        } else {
+                            alert(`${jogadorRemovido.apelido} saiu do campo. Não há substitutos disponíveis na fila. O time ficará com menos jogadores.`);
+                        }
+                    }
+                }
+
+                // 2. Remover de qualquer time na fila (filaTimes)
+                filaTimes = filaTimes.filter(time => {
+                    const filteredTime = time.filter(p => p.apelido !== jogadorRemovido.apelido);
+                    time.length = 0; // Limpa o array original
+                    time.push(...filteredTime); // Preenche com os jogadores restantes
+                    return time.length > 0; // Mantém apenas times não vazios
+                });
+                organizarFilaAposRemocao(qtdPorTime); // Reorganiza a fila novamente caso alguém tenha saído dela diretamente
+
+                // 3. Remover de qualquer time na lista 'times' (a lista original de times formados para a sessão)
+                // Isso garante que ele não seja reintroduzido inadvertidamente nas visualizações da sessão.
+                times = times.filter(time => {
+                    const filteredTime = time.filter(p => p.apelido !== jogadorRemovido.apelido);
+                    time.length = 0;
+                    time.push(...filteredTime);
+                    return time.length > 0;
+                });
+
+                // Desmarca o checkbox do jogador na lista de seleção (se ele foi selecionado inicialmente)
+                const indexNoGlobal = jogadores.findIndex(j => j.apelido === jogadorRemovido.apelido);
+                if (indexNoGlobal !== -1) {
+                    const checkbox = document.getElementById(`checkJogador${indexNoGlobal}`);
+                    if (checkbox) {
+                        checkbox.checked = false;
+                    }
+                }
+
+                // Atualiza as interfaces do jogo
+                if (jogadorEstavaEmCampo) {
+                    updatePartidaInfo(); // Atualiza os nomes em campo
+                }
+                exibirTimes();
+                atualizarProximosJogos();
+
+                // Se um time em campo ficar com 0 jogadores após a saída, encerra o jogo
+                if (timeAtual.length > 0 && (timeAtual[0].length === 0 || timeAtual[1].length === 0) && emJogo) {
+                    clearInterval(cronometro);
+                    emJogo = false;
+                    alert("Partida encerrada porque um dos times não tem mais jogadores em campo.");
+                    hideGameControl();
+                }
+            }
+        }
+
+
+        document.getElementById('cadastroForm').addEventListener('submit', e => {
+            e.preventDefault();
+            const nome = document.getElementById('nome').value.trim();
+            const apelido = document.getElementById('apelido').value.trim();
+            if(!nome || !apelido){ 
+                alert('Preencha todos os campos para cadastrar um jogador.');
+                return;
+            }
+            jogadores.push({ nome, apelido }); 
+            salvarJogadores();
+            atualizarLista();
+            e.target.reset();
+        });
+
+        function embaralhar(arr) {
+            return arr.sort(() => Math.random() - 0.5);
+        }
+
+        document.getElementById('formTimesButton').addEventListener('click', e => { 
+            e.preventDefault();
+
+            const checkboxes = document.querySelectorAll('#listaSelecaoJogadores input[type="checkbox"]:checked');
+            if(checkboxes.length === 0){
+                alert('Selecione pelo menos um jogador para formar os times.');
+                return;
+            }
+            const selecionados = Array.from(checkboxes).map(c => jogadores[parseInt(c.value)]);
+
+            const qtd = parseInt(document.getElementById('qtdPorTime').value);
+            if(isNaN(qtd) || qtd < 1){
+                alert('Quantidade por time inválida.');
+                return;
+            }
+            if(qtd > selecionados.length){
+                alert('Quantidade por time maior que o número de jogadores selecionados.');
+                return;
+            }
+
+            const embaralhados = embaralhar([...selecionados]);
+            times = []; // Reinicia a lista mestre de times para a nova formação
+            for (let i = 0; i < embaralhados.length; i += qtd) {
+                // Adiciona um objeto time com jogadores e stats
+                const newTeam = embaralhados.slice(i, i + qtd);
+                // NEW: Initialize stats for this new team
+                newTeam.wins = 0;
+                newTeam.ties = 0;
+                times.push(newTeam);
+            }
+            filaTimes = [...times]; // Reseta a fila com os novos times
+            previousWinner = null; // Reseta o vencedor anterior
+            timeAtual = []; // Reseta os times em jogo
+            numeroPartida = 1; // Reseta o contador de partidas
+            clearInterval(cronometro); // Limpa o cronometro se estiver rodando
+            emJogo = false; // Define que não há jogo em andamento
+            timeRemaining = 0; // Zera o tempo restante
+            timeStats = {}; // NOVO: Reseta as estatísticas dos times
+
+            exibirTimes();
+            btnVamosJogar.style.display = 'block'; 
+            formTimesButton.disabled = true; 
+            btnVamosJogar.disabled = false; 
+            atualizarProximosJogos();
+            hideGameControl(); 
+            document.getElementById('tabelaHistorico').innerHTML = ''; // Limpa o histórico
+            exibirTimeDestaque(); // NOVO: Atualiza o time destaque
+        });
+
+        function exibirTimes() {
+            const container = document.getElementById('timesContainer');
+            container.innerHTML = ''; 
+
+            if(filaTimes.length === 0) {
+                container.innerHTML = '<p class="text-center text-muted">Nenhum time na fila.</p>';
+                return;
+            }
+
+            const row = document.createElement('div');
+            row.className = 'row g-3'; 
+
+            filaTimes.forEach((time) => {
+                const col = document.createElement('div');
+                col.className = 'col-md-6 col-lg-4'; 
+
+                const div = document.createElement('div');
+                div.className = 'caixa-de-equipe';
+                div.innerHTML = `<h3>Time ${getIndexTime(time)}</h3><ul class="list-unstyled">${time.map(j => `<li>${j.apelido}</li>`).join('')}</ul>`;
+                col.appendChild(div);
+                row.appendChild(col);
+            });
+            container.appendChild(row);
+        }
+
+        document.getElementById('btnVamosJogar').addEventListener('click', () => {
+            if (filaTimes.length < 2) {
+                alert('É necessário pelo menos 2 times para começar o jogo.');
+                return;
+            }
+            
+            // Garante que os times que vão entrar em campo estão completos
+            const qtdPorTime = parseInt(document.getElementById('qtdPorTime').value);
+            if (filaTimes[0].length < qtdPorTime || filaTimes[1].length < qtdPorTime) {
+                alert('Os primeiros times da fila não estão completos para iniciar o jogo. Verifique as substituições ou adicione mais jogadores.');
+                return;
+            }
+
+            timeAtual = [filaTimes.shift(), filaTimes.shift()];
+            iniciarControleDeJogo();
+            exibirTimes();
+            atualizarProximosJogos();
+            btnVamosJogar.disabled = true; 
+        });
+
+        function iniciarControleDeJogo() {
+            document.getElementById('controlePartida').style.display = 'block';
+            updatePartidaInfo();
+            document.getElementById('numeroJogo').innerText = `Jogo ${numeroPartida}`;
+            document.getElementById('duracaoJogo').disabled = false;
+            emJogo = false; 
+            atualizarCronometro(timeRemaining || 0);
+            document.getElementById('btnEncerrar').style.display = 'block'; 
+            document.getElementById('btnAdicionarJogador').style.display = 'block'; 
+        }
+
+        function updatePartidaInfo() {
+            const index1 = getIndexTime(timeAtual[0]);
+            const index2 = getIndexTime(timeAtual[1]);
+
+            let html =
+                `<div class="text-center fw-bold mb-3">
+                    Time ${index1} vs Time ${index2}
+                </div>
+                <div class="row text-center">
+                    <div class="col-6">
+                        <h4 class="mb-2">Time ${index1}</h4>
+                        ${timeAtual[0].map((j, idx) => `
+                            <div class="d-flex justify-content-between align-items-center py-1 border-bottom border-secondary-subtle">
+                                <span>${j.apelido}</span>
+                                <button class="btn-warning-custom btn-sm-custom" onclick="substituirJogador('${j.apelido}', 0, ${idx})">Substituir</button>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="col-6">
+                        <h4 class="mb-2">Time ${index2}</h4>
+                        ${timeAtual[1].map((j, idx) => `
+                            <div class="d-flex justify-content-between align-items-center py-1 border-bottom border-secondary-subtle">
+                                <span>${j.apelido}</span>
+                                <button class="btn-warning-custom btn-sm-custom" onclick="substituirJogador('${j.apelido}', 1, ${idx})">Substituir</button>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>`;
+
+            document.getElementById('partidaInfo').innerHTML = html;
+        }
+
+        function getIndexTime(time) {
+            // Tenta encontrar o índice original do time na lista mestre 'times'
+            const index = times.indexOf(time);
+            return index !== -1 ? index + 1 : '?';
+        }
+
+        function getTextoDuelo(timeA, timeB) {
+            return `Time ${getIndexTime(timeA)} vs Time ${getIndexTime(timeB)}`;
+        }
+
+        function atualizarCronometro(segundos) {
+            const min = String(Math.floor(segundos / 60)).padStart(2, '0');
+            const sec = String(segundos % 60).padStart(2, '0');
+            document.getElementById('cronometroDisplay').innerText = `${min}:${sec}`;
+        }
+
+        function atualizarProximosJogos() {
+            const container = document.getElementById('timesProximosContainer');
+            container.innerHTML = '';
+
+            if(filaTimes.length === 0){
+                container.innerHTML = '<div class="text-center text-muted w-100">Nenhum time aguardando para o próximo jogo.</div>';
+                return;
+            }
+
+            const proxTimes = filaTimes.slice(0, 4);
+
+            proxTimes.forEach((time) => {
+                const index = getIndexTime(time);
+                const divTime = document.createElement('div');
+                divTime.className = 'time-proximo';
+                let jogadoresHtml = '';
+                time.forEach(j => {
+                    jogadoresHtml += `
+                        <div>
+                            <span>${j.apelido}</span>
+                            <button class="btn-danger-custom btn-sm-custom" onclick="removerJogadorDoJogo('${j.apelido}')">Foi Embora</button>
+                        </div>`;
+                });
+                divTime.innerHTML = `<h4>Time ${index}</h4>${jogadoresHtml}`;
+                container.appendChild(divTime);
+            });
+        }
+
+        // Função para reintegrar jogadores no final da fila ou em um novo time
+        function reintegrarJogadores(jogadoresParaReintegrar) {
+            if (jogadoresParaReintegrar.length === 0) return;
+
+            const qtdPorTime = parseInt(document.getElementById('qtdPorTime').value);
+            let jogadoresARealocar = [...jogadoresParaReintegrar];
+
+            while (jogadoresARealocar.length > 0) {
+                let ultimoTime = filaTimes.length > 0 ? filaTimes[filaTimes.length - 1] : null;
+
+                // Se não houver times na fila ou se o último time estiver cheio, crie um novo
+                if (!ultimoTime || ultimoTime.length >= qtdPorTime) {
+                    const novoTime = [];
+                    // NEW: Initialize stats for this dynamically created team
+                    novoTime.wins = 0;
+                    novoTime.ties = 0;
+                    times.push(novoTime); // Adiciona na lista mestre de times
+                    filaTimes.push(novoTime); // Adiciona na fila de espera
+                    ultimoTime = novoTime;
+                }
+
+                const espacoDisponivel = qtdPorTime - ultimoTime.length;
+                const jogadoresParaAdicionar = jogadoresARealocar.splice(0, espacoDisponivel);
+                ultimoTime.push(...jogadoresParaAdicionar);
+            }
+        }
+
+        // NOVA FUNÇÃO ESSENCIAL: Organiza a fila após um jogador ser retirado (substituição ou "foi embora")
+        function organizarFilaAposRemocao(qtdPorTime) {
+            for (let i = 0; i < filaTimes.length - 1; i++) {
+                const timeAtualNaFila = filaTimes[i];
+                const proximoTimeNaFila = filaTimes[i + 1];
+
+                // Se o time atual na fila não estiver completo e houver jogadores no próximo time
+                if (timeAtualNaFila.length < qtdPorTime && proximoTimeNaFila.length > 0) {
+                    const jogadoresParaPuxar = qtdPorTime - timeAtualNaFila.length;
+                    for (let j = 0; j < jogadoresParaPuxar && proximoTimeNaFila.length > 0; j++) {
+                        timeAtualNaFila.push(proximoTimeNaFila.shift());
+                    }
+                }
+            }
+            // Remove quaisquer times que possam ter ficado vazios após a cascata
+            filaTimes = filaTimes.filter(time => time.length > 0);
+        }
+
+
+        // FUNÇÃO DE SUBSTITUIÇÃO REVISADA
+        function substituirJogador(apelidoJogadorSaindo, timeIndex, playerIndexInTeam) {
+            if (timeAtual.length === 0) {
+                alert("Não há times em campo para fazer substituições.");
+                return;
+            }
+
+            const timeQuePerdeJogador = timeAtual[timeIndex];
+            const jogadorSaindo = timeQuePerdeJogador[playerIndexInTeam];
+
+            if (!jogadorSaindo) {
+                console.error("Jogador a ser substituído não encontrado.", apelidoJogadorSaindo, timeIndex, playerIndexInTeam);
+                return;
+            }
+
+            const qtdPorTime = parseInt(document.getElementById('qtdPorTime').value);
+
+            let substituto = null;
+            if (filaTimes.length > 0) {
+                substituto = filaTimes[0].shift();
+                organizarFilaAposRemocao(qtdPorTime);
+            }
+
+            if (!substituto) {
+                alert("Não há jogadores disponíveis na fila para substituição. O time ficará com um jogador a menos.");
+                timeQuePerdeJogador.splice(playerIndexInTeam, 1); 
+            } else {
+                timeQuePerdeJogador.splice(playerIndexInTeam, 1, substituto);
+                alert(`${substituto.apelido} substituiu ${jogadorSaindo.apelido} no Time ${getIndexTime(timeQuePerdeJogador)}.`);
+            }
+
+            reintegrarJogadores([jogadorSaindo]);
+
+            updatePartidaInfo();
+            exibirTimes();
+            atualizarProximosJogos();
+        }
+
+
+        document.getElementById('btnIniciar').addEventListener('click', () => {
+            if (emJogo) return;
+            if (timeAtual.length === 0) { 
+                alert('Nenhum jogo em andamento. Clique em "Vamos Jogar!" primeiro para escalar os times.');
+                return;
+            }
+
+            if (!timeRemaining) {
+                const minutos = parseInt(document.getElementById('duracaoJogo').value);
+                if (isNaN(minutos) || minutos < 1) return alert('Tempo mínimo é 1 minuto.');
+                timeRemaining = minutos * 60;
+            }
+            emJogo = true;
+            document.getElementById('duracaoJogo').disabled = true;
+            document.getElementById('btnEncerrar').style.display = 'block';
+            document.getElementById('btnIniciar').textContent = 'Continuar';
+            cronometro = setInterval(() => {
+                if (timeRemaining <= 0) {
+                    clearInterval(cronometro);
+                    emJogo = false;
+                    encerrarJogo('tempo');
+                } else {
+                    timeRemaining--;
+                    atualizarCronometro(timeRemaining);
+                }
+            }, 1000);
+        });
+
+        document.getElementById('btnPausar').addEventListener('click', () => {
+            if (!emJogo) return; 
+            clearInterval(cronometro);
+            emJogo = false;
+            document.getElementById('btnIniciar').textContent = 'Retomar';
+        });
+
+        document.getElementById('btnEncerrar').addEventListener('click', () => {
+            if (timeAtual.length === 0) {
+                alert('Não há um jogo em andamento para ser encerrado.');
+                return;
+            }
+            encerrarJogo('manual');
+        });
+
+        function encerrarJogo(tipo) {
+            if (emJogo) clearInterval(cronometro);
+            emJogo = false;
+            document.getElementById('duracaoJogo').disabled = false;
+            document.getElementById('btnIniciar').textContent = 'Iniciar';
+
+            let escolha;
+            const partidaInfoTexto = getTextoDuelo(timeAtual[0], timeAtual[1]);
+            do {
+                escolha = prompt(`Quem venceu? Digite: 1 para Time ${getIndexTime(timeAtual[0])}, 2 para Time ${getIndexTime(timeAtual[1])} ou "empate"`).toLowerCase();
+                if (escolha === null) {
+                    alert('Resultado obrigatório para encerrar o jogo.');
+                } else if (!['1', '2', 'empate'].includes(escolha)) {
+                    alert('Opção inválida! Digite 1, 2 ou empate.');
+                }
+            } while (escolha === null || !['1', '2', 'empate'].includes(escolha));
+
+            const tabelaHistorico = document.getElementById('tabelaHistorico');
+            const duracao = document.getElementById('duracaoJogo').value;
+            let resultadoTexto;
+            let timeVencedor = null;
+            let timePerdedor = null;
+
+            if (escolha === '1') {
+                resultadoTexto = `Time ${getIndexTime(timeAtual[0])} (vencedor)`;
+                timeVencedor = timeAtual[0];
+                timePerdedor = timeAtual[1];
+                // NOVO: Atualiza estatísticas do vencedor
+                timeVencedor.wins = (timeVencedor.wins || 0) + 1;
+            } else if (escolha === '2') {
+                resultadoTexto = `Time ${getIndexTime(timeAtual[1])} (vencedor)`;
+                timeVencedor = timeAtual[1];
+                timePerdedor = timeAtual[0];
+                // NOVO: Atualiza estatísticas do vencedor
+                timeVencedor.wins = (timeVencedor.wins || 0) + 1;
+            } else {
+                resultadoTexto = 'Empate';
+                // NOVO: Atualiza estatísticas dos times (ambos empataram)
+                timeAtual[0].ties = (timeAtual[0].ties || 0) + 1;
+                timeAtual[1].ties = (timeAtual[1].ties || 0) + 1;
+            }
+
+            tabelaHistorico.innerHTML += `<tr><td>Jogo ${numeroPartida}</td><td>${partidaInfoTexto}</td><td>${resultadoTexto}</td><td>${duracao} min</td></tr>`;
+
+            let jogadoresParaReintegrar = [];
+            if (escolha === 'empate') {
+                jogadoresParaReintegrar.push(...timeAtual[0], ...timeAtual[1]);
+                previousWinner = null;
+            } else {
+                jogadoresParaReintegrar.push(...timePerdedor);
+                previousWinner = timeVencedor; // Guarda o vencedor para o próximo jogo
+            }
+
+            reintegrarJogadores(jogadoresParaReintegrar); 
+
+            timeRemaining = 0;
+            numeroPartida++;
+            
+            exibirTimeDestaque(); // NOVO: Atualiza o time destaque após cada jogo
+
+            const qtdPorTime = parseInt(document.getElementById('qtdPorTime').value);
+
+            if (previousWinner) {
+                if (filaTimes.length > 0) {
+                    organizarFilaAposRemocao(qtdPorTime); 
+
+                    if (filaTimes.length > 0 && filaTimes[0].length === qtdPorTime) {
+                        const desafiante = filaTimes.shift();
+                        timeAtual = [previousWinner, desafiante]; 
+                    } else {
+                        alert('Vencedor aguardando um novo desafiante!');
+                        timeAtual = []; 
+                        previousWinner = null; 
+                        hideGameControl();
+                        exibirTimes();
+                        atualizarProximosJogos();
+                        return;
+                    }
+                } else {
+                    alert('Vencedor aguardando, mas não há desafiantes na fila!');
+                    timeAtual = [];
+                    previousWinner = null;
+                    hideGameControl();
+                    exibirTimes();
+                    atualizarProximosJogos();
+                    return;
+                }
+            } else { 
+                if (filaTimes.length >= 2) {
+                    organizarFilaAposRemocao(qtdPorTime);
+                    if (filaTimes.length >= 2) {
+                        const tempFirst = filaTimes.shift();
+                        organizarFilaAposRemocao(qtdPorTime);
+                        filaTimes.unshift(tempFirst); 
+                    }
+
+                    if (filaTimes.length >= 2 && filaTimes[0].length === qtdPorTime && filaTimes[1].length === qtdPorTime) {
+                        timeAtual = [filaTimes.shift(), filaTimes.shift()];
+                    } else {
+                        alert('Não há dois times completos na fila para a próxima partida!');
+                        timeAtual = [];
+                        hideGameControl();
+                        exibirTimes();
+                        atualizarProximosJogos();
+                        return;
+                    }
+
+                } else {
+                    alert('Não há times suficientes na fila para a próxima partida!');
+                    timeAtual = [];
+                    hideGameControl();
+                    exibirTimes();
+                    atualizarProximosJogos();
+                    return;
+                }
+            }
+
+            if (timeAtual.length === 0 || timeAtual[0].length === 0 || timeAtual[1].length === 0) {
+                alert("Os times não têm jogadores suficientes para a próxima partida. Forme novos times ou aguarde mais jogadores.");
+                timeAtual = [];
+                hideGameControl();
+                exibirTimes();
+                atualizarProximosJogos();
+                return;
+            }
+
+            iniciarControleDeJogo(); 
+            exibirTimes(); 
+            atualizarProximosJogos(); 
+        }
+
+        function hideGameControl() {
+            document.getElementById('controlePartida').style.display = 'none';
+            document.getElementById('btnEncerrar').style.display = 'none';
+            document.getElementById('btnAdicionarJogador').style.display = 'none'; 
+            btnVamosJogar.style.display = 'block'; 
+            
+            timeAtual = []; 
+            previousWinner = null;
+        }
+
+
+        // --- Novas Funções para Adicionar Jogador ---
+
+        document.getElementById('btnAdicionarJogador').addEventListener('click', () => {
+            document.getElementById('adicionarJogadorModal').style.display = 'block';
+            document.getElementById('modalBackdrop').style.display = 'block'; 
+            document.getElementById('controlePartida').style.display = 'none'; 
+            popularSelectJogadores();
+            document.getElementById('novoNome').value = '';
+            document.getElementById('novoApelido').value = '';
+            document.getElementById('selectJogadorExistente').value = ''; 
+        });
+
+        function popularSelectJogadores() {
+            const select = document.getElementById('selectJogadorExistente');
+            select.innerHTML = '<option value="">-- Selecione ou Cadastre um Novo --</option>';
+            
+            const jogadoresEmSessao = new Set();
+            if (timeAtual.length > 0) {
+                timeAtual[0].forEach(p => jogadoresEmSessao.add(p.apelido));
+                timeAtual[1].forEach(p => jogadoresEmSessao.add(p.apelido));
+            }
+            filaTimes.forEach(team => team.forEach(p => jogadoresEmSessao.add(p.apelido)));
+
+            jogadores.forEach((j, index) => {
+                if (!jogadoresEmSessao.has(j.apelido)) {
+                    const option = document.createElement('option');
+                    option.value = index; 
+                    option.textContent = j.apelido + (j.nome ? ` (${j.nome})` : '');
+                    select.appendChild(option);
+                }
+            });
+        }
+
+        document.getElementById('btnConfirmarAdicao').addEventListener('click', () => {
+            const selectedIndex = document.getElementById('selectJogadorExistente').value;
+            const novoNome = document.getElementById('novoNome').value.trim();
+            const novoApelido = document.getElementById('novoApelido').value.trim();
+
+            let jogadorParaAdicionar = null;
+
+            if (selectedIndex !== '') { 
+                jogadorParaAdicionar = jogadores[parseInt(selectedIndex)];
+                if (!jogadorParaAdicionar) {
+                    alert('Erro ao selecionar jogador existente. Tente novamente.');
+                    return;
+                }
+            } else if (novoApelido && novoNome) { 
+                const jogadorExistente = jogadores.find(j => j.apelido.toLowerCase() === novoApelido.toLowerCase());
+                if (jogadorExistente) {
+                    alert(`Um jogador com o apelido "${novoApelido}" já existe na lista global. Por favor, escolha outro apelido ou selecione o jogador existente.`);
+                    return;
+                }
+
+                jogadorParaAdicionar = { nome: novoNome, apelido: novoApelido }; 
+                jogadores.push(jogadorParaAdicionar);
+                salvarJogadores();
+                atualizarLista(); 
+            } else {
+                alert('Por favor, selecione um jogador existente OU preencha todos os campos (Nome e Apelido) para cadastrar um novo jogador.');
+                return;
+            }
+
+            if (jogadorParaAdicionar) {
+                reintegrarJogadores([jogadorParaAdicionar]);
+                alert(`${jogadorParaAdicionar.apelido} foi adicionado à partida!`);
+            }
+
+            document.getElementById('adicionarJogadorModal').style.display = 'none';
+            document.getElementById('modalBackdrop').style.display = 'none'; 
+            document.getElementById('controlePartida').style.display = 'block';
+            exibirTimes(); 
+            atualizarProximosJogos(); 
+        });
+
+        document.getElementById('btnVoltarModal').addEventListener('click', () => {
+            document.getElementById('adicionarJogadorModal').style.display = 'none';
+            document.getElementById('modalBackdrop').style.display = 'none'; 
+            document.getElementById('controlePartida').style.display = 'block';
+        });
+
+
+        // --- New functionality for "Encerrar Dia de Jogo" ---
+        const btnEncerrarDiaDeJogo = document.getElementById('btnEncerrarDiaDeJogo');
+
+        btnEncerrarDiaDeJogo.addEventListener('click', () => {
+            if (confirm('Tem certeza que deseja encerrar o dia de jogo? Todos os times serão resetados e o histórico será limpo.')) {
+                resetDiaDeJogo();
+            }
+        });
+
+        function resetDiaDeJogo() {
+            if (emJogo) {
+                clearInterval(cronometro);
+            }
+            emJogo = false;
+            timeRemaining = 0;
+            document.getElementById('cronometroDisplay').innerText = '00:00';
+            document.getElementById('btnIniciar').textContent = 'Iniciar';
+            document.getElementById('duracaoJogo').disabled = false;
+
+            times = [];
+            filaTimes = [];
+            timeAtual = [];
+            previousWinner = null;
+            numeroPartida = 1;
+            timeStats = {}; // NOVO: Reseta as estatísticas dos times
+
+            document.getElementById('timesContainer').innerHTML = '<p class="text-center text-muted">Nenhum time na fila.</p>';
+            document.getElementById('tabelaHistorico').innerHTML = '';
+            document.getElementById('timesProximosContainer').innerHTML = '<div class="text-center text-muted w-100">Nenhum time aguardando para o próximo jogo.</div>';
+            document.getElementById('partidaInfo').innerHTML = '';
+            document.getElementById('numeroJogo').innerText = 'Jogo 1';
+
+            hideGameControl();
+
+            formTimesButton.disabled = false;
+            btnVamosJogar.disabled = true; 
+            btnVamosJogar.style.display = 'none'; 
+
+            atualizarListaSelecao();
+            popularSelectJogadores();
+            exibirTimeDestaque(); // NOVO: Limpa o time destaque ao encerrar o dia
+            alert('Dia de jogo encerrado. Pronto para um novo dia!');
+        }
+
+        // NOVO: Função para calcular e exibir o time destaque
+        function exibirTimeDestaque() {
+            const timeDestaqueInfoDiv = document.getElementById('timeDestaqueInfo');
+            let highlightTeam = null;
+            let maxGames = -1;
+
+            // Percorre a lista mestre de times para encontrar o destaque
+            times.forEach(team => {
+                const totalGames = (team.wins || 0) + (team.ties || 0);
+                if (totalGames > maxGames) {
+                    maxGames = totalGames;
+                    highlightTeam = team;
+                } else if (totalGames === maxGames && highlightTeam && team.wins > highlightTeam.wins) {
+                    // Critério de desempate: mais vitórias
+                    highlightTeam = team;
+                }
+            });
+
+            if (highlightTeam && maxGames > 0) {
+                const teamIndex = getIndexTime(highlightTeam);
+                const wins = highlightTeam.wins || 0;
+                const ties = highlightTeam.ties || 0;
+                
+                let playersHtml = highlightTeam.map(player => `<li>${player.apelido}</li>`).join('');
+
+                timeDestaqueInfoDiv.innerHTML = `
+                    <h4>Time ${teamIndex}</h4>
+                    <p><strong>Vitórias:</strong> ${wins}</p>
+                    <p><strong>Empates:</strong> ${ties}</p>
+                    <p><strong>Total de Partidas Jogadas:</strong> ${maxGames}</p>
+                    <ul>
+                        <strong>Jogadores:</strong>
+                        ${playersHtml}
+                    </ul>
+                `;
+            } else {
+                timeDestaqueInfoDiv.innerHTML = '<p class="text-muted">Nenhum time em destaque ainda. Jogue algumas partidas!</p>';
+            }
+        }
+
+
+        // Inicialização
+        atualizarLista();
+        atualizarProximosJogos();
+        exibirTimeDestaque(); // NOVO: Chama na inicialização para exibir o estado atual
+        formTimesButton.disabled = false;
+        btnVamosJogar.disabled = true;
+    </script>
+</body>
+</html>
